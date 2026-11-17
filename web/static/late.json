@@ -1,0 +1,28 @@
+{
+  "bank": [
+    {
+      "external_ref": "BK-2026-0008",
+      "account": "6222-8801",
+      "value_date": "2026-08-20",
+      "posted_at": "2026-09-15T09:00:00Z",
+      "amount_cents": 76000,
+      "direction": "debit",
+      "counterparty": "速通快递",
+      "memo": "快递费 8月补录",
+      "currency": "CNY"
+    }
+  ],
+  "ledger": [
+    {
+      "external_ref": "GL-2026-0007",
+      "account": "6222-8801",
+      "value_date": "2026-08-20",
+      "posted_at": "2026-08-20T18:00:00Z",
+      "amount_cents": 76000,
+      "direction": "debit",
+      "counterparty": "速通快递",
+      "memo": "快递费 8月",
+      "currency": "CNY"
+    }
+  ]
+}

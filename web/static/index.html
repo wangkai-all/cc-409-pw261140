@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>对账工作台 · 虚构演示</title>
+<link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="mark" aria-hidden="true">对</span>
+    <div>
+      <h1>对账工作台</h1>
+      <p class="sub">虚构流水演示 · 不执行任何真实转账</p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="主视图">
+    <button class="tab active" role="tab" data-view="overview" aria-selected="true">总览</button>
+    <button class="tab" role="tab" data-view="match" aria-selected="false">匹配</button>
+    <button class="tab" role="tab" data-view="balance" aria-selected="false">余额分析</button>
+    <button class="tab" role="tab" data-view="drills" aria-selected="false">恢复演练</button>
+  </nav>
+  <div class="health" id="health" aria-live="polite"></div>
+</header>
+
+<main>
+  <div id="notice" class="notice" role="status" hidden></div>
+
+  <!-- 总览 -->
+  <section id="view-overview" class="view active">
+    <div class="grid cards" id="overview-cards"></div>
+    <div class="panel">
+      <div class="panel-head">
+        <h2>余额差异如何由具体匹配产生</h2>
+        <button class="btn ghost" id="refresh-overview">刷新</button>
+      </div>
+      <p class="muted">
+        恒等式：账务合计 − 银行合计 = 匹配内接受差额 + 仅账务流水 − 仅银行流水。
+        差额不是被“抹平”，而是被逐笔解释。
+      </p>
+      <div id="overview-ledger" class="explain"></div>
+    </div>
+  </section>
+
+  <!-- 匹配 -->
+  <section id="view-match" class="view">
+    <div class="split">
+      <div class="panel list-panel">
+        <div class="panel-head"><h2>流水</h2><span id="rows-count" class="chip"></span></div>
+        <div class="filters">
+          <select id="rows-source"><option value="">全部来源</option><option value="bank">银行</option><option value="ledger">账务</option></select>
+          <select id="rows-status"><option value="active">有效</option><option value="all">全部</option></select>
+          <select id="rows-late"><option value="">含迟到/正常</option><option value="1">仅迟到</option></select>
+          <input id="rows-search" type="search" placeholder="搜索引用号 / 摘要" />
+        </div>
+        <div id="row-list" class="row-list" tabindex="0" aria-label="流水列表"></div>
+      </div>
+      <div class="panel detail-panel">
+        <div id="row-detail" class="detail-empty">选择一笔流水查看候选依据</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>匹配记录</h2><span id="matches-count" class="chip"></span></div>
+      <div id="match-list" class="match-list"></div>
+    </div>
+  </section>
+
+  <!-- 余额分析 -->
+  <section id="view-balance" class="view">
+    <div id="balance-degraded"></div>
+    <div class="grid cards" id="balance-cards"></div>
+    <div class="panel">
+      <div class="panel-head"><h2>未达账项</h2><button class="btn ghost" id="refresh-balance">刷新</button></div>
+      <div class="two-col">
+        <div><h3>仅见银行</h3><div id="unmatched-bank" class="mini-list"></div></div>
+        <div><h3>仅见账务</h3><div id="unmatched-ledger" class="mini-list"></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>按期间归因</h2></div>
+      <div id="period-table"></div>
+    </div>
+  </section>
+
+  <!-- 演练 -->
+  <section id="view-drills" class="view">
+    <div class="grid cards" id="drill-cards"></div>
+    <div class="panel">
+      <div class="panel-head"><h2>匹配策略</h2><button class="btn" id="save-strategy">保存策略</button></div>
+      <p class="muted">修改后需重新运行匹配。人工确认不会被静默改写，只会在证据失效时标记为“已失效”。</p>
+      <div id="strategy-form" class="strategy-form"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>失败与恢复</h2></div>
+      <div class="drill-actions">
+        <button class="btn danger" id="drill-interrupt">模拟写入中断（事务回滚）</button>
+        <button class="btn" id="drill-outage">模拟服务中断 5 秒</button>
+        <button class="btn ghost" id="drill-recover">恢复并重新匹配</button>
+      </div>
+      <div id="drill-log" class="drill-log"></div>
+    </div>
+  </section>
+</main>
+
+<div id="confirm-dialog" class="dialog" role="dialog" aria-modal="true" hidden>
+  <div class="dialog-body">
+    <h2 id="dlg-title">确认</h2>
+    <div id="dlg-content"></div>
+    <label class="field"><span>备注</span><textarea id="dlg-note" rows="2" placeholder="记录人工判断依据"></textarea></label>
+    <div id="dlg-chips" class="chips"></div>
+    <div class="dialog-actions">
+      <button class="btn ghost" id="dlg-cancel">取消</button>
+      <button class="btn" id="dlg-ok">确认</button>
+    </div>
+  </div>
+</div>
+
+<script src="/config.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
